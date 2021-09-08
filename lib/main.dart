@@ -41,8 +41,8 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Center(
           child: SizedBox(
             width: 100, 
-            height: 400, 
-            child: ClipRect(child: WaterBottle()),
+            height: 200, 
+            child: ClipRect(child: WaterBottle(color: Colors.purpleAccent)),
           ),
         ),
       ),
