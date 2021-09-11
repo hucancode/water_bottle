@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:waterbottle/chemistryLabBottle.dart';
 import 'package:waterbottle/waterBottle.dart';
 
 void main() {
@@ -35,14 +36,14 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Container(
-        width: double.infinity, 
+        width: double.infinity,
         height: double.infinity,
-        color: Colors.white10,
+        color: Colors.amber[50],
         child: Center(
           child: SizedBox(
-            width: 100, 
-            height: 200, 
-            child: ClipRect(child: WaterBottle(color: Colors.purpleAccent)),
+            width: 200,
+            height: 280,
+            child: ClipRect(child: ChemistryLabBottle(color: Colors.blue)),
           ),
         ),
       ),
