@@ -88,22 +88,43 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
       : super(repaint: repaint, waves: waves, bubbles: bubbles);
 
   @override
+  void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
+    final r = math.min(size.width, size.height);
+    final neckTop = size.width * 0.1;
+    final neckBottom = size.height - r + 3;
+    final neckRingOuter = size.width * 0.2;
+    final neckRingOuterR = size.width - neckRingOuter;
+    final neckRingInner = size.width * 0.35;
+    final neckRingInnerR = size.width - neckRingInner;
+    final path = Path();
+    path.moveTo(neckRingOuter, neckTop);
+    path.lineTo(neckRingInner, neckTop);
+    path.lineTo(neckRingInner, neckBottom);
+    path.moveTo(neckRingInnerR, neckBottom);
+    path.lineTo(neckRingInnerR, neckTop);
+    path.lineTo(neckRingOuterR, neckTop);
+    canvas.drawPath(path, paint);
+    canvas.drawArc(Rect.fromLTRB(0, size.height - r, size.width, size.height),
+        math.pi * 1.59, math.pi * 1.82, false, paint);
+  }
+
+  @override
   void paintBottleMask(Canvas canvas, Size size, Paint paint) {
     final r = math.min(size.width, size.height);
-    canvas.drawCircle(Offset(r / 2, size.height - r / 2), r / 2, paint);
+    canvas.drawCircle(Offset(r / 2, size.height - r / 2), r / 2 - 5, paint);
+    final neckTop = size.width * 0.1;
+    final neckRingInner = size.width * 0.35;
+    final neckRingInnerR = size.width - neckRingInner;
     canvas.drawRect(
-        Rect.fromLTRB(
-            size.width * 0.4, 0, size.width * 0.6, size.height - r / 2),
-        paint);
-    canvas.drawRect(
-        Rect.fromLTRB(
-            size.width * 0.35, 0, size.width * 0.65, size.width * 0.1),
+        Rect.fromLTRB(neckRingInner + 5, neckTop, neckRingInnerR - 5,
+            size.height - r / 2),
         paint);
   }
 
   @override
   void paintGlossyOverlay(Canvas canvas, Size size, Paint paint) {
-    final rect = Offset.zero & size;
+    final r = math.min(size.width, size.height);
+    final rect = Offset(0, size.height - r) & size;
     final gradient = RadialGradient(
       center: Alignment.center, // near the top right
       colors: [
@@ -113,10 +134,10 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
     ).createShader(rect);
     paint.color = Colors.white;
     paint.shader = gradient;
-    final r = math.min(size.width, size.height);
     // gradient
     canvas.drawRect(
-        Rect.fromLTRB(0, size.height - r, size.width, size.height), paint);
+        Rect.fromLTRB(5, size.height - r + 3, size.width - 5, size.height - 5),
+        paint);
     // highlight
     paint.shader = null;
     paint.color = Colors.white.withAlpha(30);

@@ -38,12 +38,12 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: Colors.amber[50],
+        color: Colors.white,
         child: Center(
           child: SizedBox(
             width: 200,
             height: 280,
-            child: ClipRect(child: ChemistryLabBottle(color: Colors.blue)),
+            child: ChemistryLabBottle(color: Colors.blue),
           ),
         ),
       ),

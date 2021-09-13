@@ -55,9 +55,9 @@ class WaterBottleState extends State<WaterBottle>
 
   @override
   void dispose() {
-    super.dispose();
     waves.forEach((e) => e.dispose());
     bubbles.forEach((e) => e.dispose());
+    super.dispose();
   }
 
   @override
@@ -89,9 +89,16 @@ class WaterBottlePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     {
       final paint = Paint();
+      paint.color = Colors.blue;
+      paint.style = PaintingStyle.stroke;
+      paint.strokeWidth = 3;
+      paintEmptyBottle(canvas, size, paint);
+    }
+    {
+      final paint = Paint();
       paint.color = Colors.white;
       paint.style = PaintingStyle.fill;
-      final rect = Offset.zero & size;
+      final rect = Rect.fromLTRB(0, 0, size.width, size.height);
       canvas.saveLayer(rect, paint);
       paintBottleMask(canvas, size, paint);
     }
@@ -116,8 +123,18 @@ class WaterBottlePainter extends CustomPainter {
     canvas.restore();
   }
 
+  void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
+    final path = Path();
+    path.moveTo(0, 0);
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.lineTo(size.width, 0);
+    canvas.drawPath(path, paint);
+  }
+
   void paintBottleMask(Canvas canvas, Size size, Paint paint) {
-    canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.width), paint);
+    canvas.drawRect(
+        Rect.fromLTRB(5, 0, size.width - 5, size.height - 5), paint);
   }
 
   void paintWaves(Canvas canvas, Size size, Paint paint) {
