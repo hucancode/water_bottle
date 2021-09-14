@@ -168,28 +168,6 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
     canvas.drawRect(
         Rect.fromLTRB(5, size.height - r + 3, size.width - 5, size.height - 5),
         paint);
-    // highlight
-    paint.shader = null;
-    paint.color = Colors.white.withAlpha(30);
-    paint.style = PaintingStyle.stroke;
-    const HIGHLIGHT_WIDTH = 0.1;
-    paint.strokeWidth = r * HIGHLIGHT_WIDTH;
-    const HIGHLIGHT_OFFSET = 0.1;
-    final delta = r * HIGHLIGHT_OFFSET;
-    canvas.drawArc(
-        Rect.fromLTRB(delta, size.height - r + delta, size.width - delta,
-            size.height - delta),
-        math.pi * 0.8,
-        math.pi * 0.4,
-        false,
-        paint);
-    canvas.drawArc(
-        Rect.fromLTRB(delta, size.height - r + delta, size.width - delta,
-            size.height - delta),
-        math.pi * 1.25,
-        math.pi * 0.1,
-        false,
-        paint);
   }
 
   @override
