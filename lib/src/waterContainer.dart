@@ -1,8 +1,7 @@
-
-import 'package:waterbottle/bubble.dart';
-import 'package:waterbottle/wave.dart';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'bubble.dart';
+import 'wave.dart';
 
 class WaterContainer {
   List<WaveLayer> waves = List<WaveLayer>.empty(growable: true);

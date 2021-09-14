@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waterbottle/sphericalBottle.dart';
-import 'package:waterbottle/triangularBottle.dart';
-import 'package:waterbottle/waterBottle.dart';
+import 'package:water_bottle/water_bottle.dart';
 
 void main() {
   runApp(MyApp());

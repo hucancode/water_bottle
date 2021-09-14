@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:waterbottle/bubble.dart';
 import 'dart:math' as math;
-import 'package:waterbottle/waterContainer.dart';
-import 'package:waterbottle/wave.dart';
+import 'waterContainer.dart';
+import 'wave.dart';
+import 'bubble.dart';
 
 class WaterBottle extends StatefulWidget {
   final Color waterColor;
