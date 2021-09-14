@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 import 'package:waterbottle/bubble.dart';
+import 'dart:math' as math;
+import 'package:waterbottle/waterContainer.dart';
 import 'package:waterbottle/wave.dart';
 
 class WaterBottle extends StatefulWidget {
@@ -11,52 +12,20 @@ class WaterBottle extends StatefulWidget {
 }
 
 class WaterBottleState extends State<WaterBottle>
-    with TickerProviderStateMixin {
-  List<WaveLayer> waves = List<WaveLayer>.empty(growable: true);
-  List<Bubble> bubbles = List<Bubble>.empty(growable: true);
-  static const WAVE_COUNT = 3;
-  static const BUBBLE_COUNT = 10;
-  static const ONLY_LISTEN_TO_ONE_ANIMATION = false;
+    with TickerProviderStateMixin, WaterContainer {
 
   @override
   void initState() {
     super.initState();
-    var f = math.Random().nextInt(5000) + 15000;
-    var d = math.Random().nextInt(500) + 1500;
-    var color = HSLColor.fromColor(widget.color);
-    for (var i = 0; i < WAVE_COUNT; i++) {
-      final wave = WaveLayer();
-      wave.init(this, frequency: f);
-      final sat = color.saturation * math.pow(0.6, (WAVE_COUNT - 1 - i));
-      final light = color.lightness * math.pow(0.8, (WAVE_COUNT - 1 - i));
-      wave.color = color.withSaturation(sat).withLightness(light).toColor();
-      waves.add(wave);
-      f -= d;
-      f = math.max(f, 0);
-      if (!ONLY_LISTEN_TO_ONE_ANIMATION) {
-        wave.animation.addListener(() {
-          setState(() {});
-        });
-      }
-    }
-    if (ONLY_LISTEN_TO_ONE_ANIMATION && waves.length > 0) {
-      waves.first.animation.addListener(() {
+    initWater(widget.color, this);
+    waves.first.animation.addListener(() {
         setState(() {});
-      });
-    }
-
-    for (var i = 0; i < BUBBLE_COUNT; i++) {
-      final bubble = Bubble();
-      bubble.init(this);
-      bubble.randomize();
-      bubbles.add(bubble);
-    }
+    });
   }
 
   @override
   void dispose() {
-    waves.forEach((e) => e.dispose());
-    bubbles.forEach((e) => e.dispose());
+    disposeWater();
     super.dispose();
   }
 
@@ -69,7 +38,7 @@ class WaterBottleState extends State<WaterBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: WaterBottlePainter(waves: waves, bubbles: bubbles),
+            painter: WaterBottlePainter(waves: waves, bubbles: bubbles, waterLevel: waterLevel),
           ),
         ),
       ],
@@ -80,9 +49,10 @@ class WaterBottleState extends State<WaterBottle>
 class WaterBottlePainter extends CustomPainter {
   final List<WaveLayer> waves;
   final List<Bubble> bubbles;
+  final waterLevel;
 
   WaterBottlePainter(
-      {Listenable? repaint, required this.waves, required this.bubbles})
+      {Listenable? repaint, required this.waves, required this.bubbles, required this.waterLevel})
       : super(repaint: repaint);
 
   @override
@@ -163,17 +133,19 @@ class WaterBottlePainter extends CustomPainter {
       final translateRange = desiredW - size.width;
       final scaleX = desiredW / wave.svgData.getBounds().width;
       final scaleY = desiredH / wave.svgData.getBounds().height;
-      final translate = -wave.offset * translateRange;
-      transform.translate(translate);
+      final translateX = -wave.offset * translateRange;
+      final waterRange = size.height + size.width; // 0 = no water = size.height; 1 = full water = -size.width
+      final translateY = (1.0 - waterLevel) * waterRange - size.width;
+      transform.translate(translateX, translateY);
       transform.scale(scaleX, scaleY);
       canvas.drawPath(wave.svgData.transform(transform.storage), paint);
       if (waves.indexOf(wave) != waves.length - 1) {
         continue;
       }
-      final gap = size.height - desiredH;
+      final gap = size.height - desiredH - translateY;
       if (gap > 0) {
         canvas.drawRect(
-            Rect.fromLTRB(0, desiredH, size.width, size.height), paint);
+            Rect.fromLTRB(0, desiredH + translateY, size.width, size.height), paint);
       }
     }
   }
@@ -181,7 +153,7 @@ class WaterBottlePainter extends CustomPainter {
   void paintBubbles(Canvas canvas, Size size, Paint paint) {
     for (var bubble in bubbles) {
       paint.color = bubble.color;
-      final offset = Offset(bubble.x * size.width, bubble.y * size.height);
+      final offset = Offset(bubble.x * size.width, (bubble.y + 1.0 - waterLevel) * size.height);
       final radius = bubble.size * math.min(size.width, size.height);
       canvas.drawCircle(offset, radius, paint);
     }

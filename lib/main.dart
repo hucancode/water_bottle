@@ -10,11 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Water Bottle Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Water Bottle'),
     );
   }
 }
@@ -29,6 +29,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final plainBottleRef = GlobalKey<WaterBottleState>();
+  final chemistryBottleRef = GlobalKey<ChemistryLabBottleState>();
+  var waterLevel = 0.5;
+  var selectedStyle = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,13 +43,56 @@ class _MyHomePageState extends State<MyHomePage> {
         width: double.infinity,
         height: double.infinity,
         color: Colors.white,
-        child: Center(
-          child: SizedBox(
-            width: 200,
-            height: 300,
-            //child: WaterBottle(color: Colors.blue),
-            child: ChemistryLabBottle(color: Colors.blue),
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Spacer(flex: 2),
+            Center(
+              child: SizedBox(
+                width: 200,
+                height: 300,
+                child: selectedStyle == 0? WaterBottle(key: plainBottleRef, color: Colors.blue):
+                  ChemistryLabBottle(key: chemistryBottleRef, color: Colors.blue),
+              ),
+            ),
+            Spacer(),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+              child: Center(child: ToggleButtons(
+                children: [
+                  Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8), child: Icon(Icons.local_drink)),
+                  Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8), child: Icon(Icons.science)),
+                ], 
+                isSelected: List<bool>.generate(2, (index) => index == selectedStyle),
+                onPressed: (index) => setState(() => selectedStyle = index)
+              ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+              child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.opacity),
+                SizedBox(width: 10),
+                Expanded(child: Slider(
+                  value: waterLevel, 
+                  max: 1.0,
+                  min: 0.0,
+                  onChanged: (value) {
+                    setState(() {
+                      waterLevel = value;
+                      plainBottleRef.currentState?.waterLevel = waterLevel;
+                      chemistryBottleRef.currentState?.waterLevel = waterLevel;
+                    });
+                  }
+                ),),
+              ],
+            ),),
+            Spacer(),
+          ],
         ),
       ),
     );

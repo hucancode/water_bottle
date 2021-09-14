@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:waterbottle/bubble.dart';
 import 'package:waterbottle/waterBottle.dart';
+import 'package:waterbottle/waterContainer.dart';
 import 'package:waterbottle/wave.dart';
 
-// TODO: this aproach violates DRY principle, need to find a better inherritance design
 class ChemistryLabBottle extends StatefulWidget {
   final Color color;
   ChemistryLabBottle({Key? key, this.color = Colors.blue}) : super(key: key);
@@ -14,53 +14,21 @@ class ChemistryLabBottle extends StatefulWidget {
 }
 
 class ChemistryLabBottleState extends State<ChemistryLabBottle>
-    with TickerProviderStateMixin {
-  List<WaveLayer> waves = List<WaveLayer>.empty(growable: true);
-  List<Bubble> bubbles = List<Bubble>.empty(growable: true);
-  static const WAVE_COUNT = 3;
-  static const BUBBLE_COUNT = 10;
-  static const ONLY_LISTEN_TO_ONE_ANIMATION = false;
+    with TickerProviderStateMixin, WaterContainer  {
 
   @override
   void initState() {
     super.initState();
-    var f = math.Random().nextInt(5000) + 15000;
-    var d = math.Random().nextInt(500) + 1500;
-    var color = HSLColor.fromColor(widget.color);
-    for (var i = 0; i < WAVE_COUNT; i++) {
-      final wave = WaveLayer();
-      wave.init(this, frequency: f);
-      final sat = color.saturation * math.pow(0.6, (WAVE_COUNT - 1 - i));
-      final light = color.lightness * math.pow(0.8, (WAVE_COUNT - 1 - i));
-      wave.color = color.withSaturation(sat).withLightness(light).toColor();
-      waves.add(wave);
-      f -= d;
-      f = math.max(f, 0);
-      if (!ONLY_LISTEN_TO_ONE_ANIMATION) {
-        wave.animation.addListener(() {
-          setState(() {});
-        });
-      }
-    }
-    if (ONLY_LISTEN_TO_ONE_ANIMATION && waves.length > 0) {
-      waves.first.animation.addListener(() {
+    initWater(widget.color, this);
+    waves.first.animation.addListener(() {
         setState(() {});
-      });
-    }
-
-    for (var i = 0; i < BUBBLE_COUNT; i++) {
-      final bubble = Bubble();
-      bubble.init(this);
-      bubble.randomize();
-      bubbles.add(bubble);
-    }
+    });
   }
 
   @override
   void dispose() {
+    disposeWater();
     super.dispose();
-    waves.forEach((e) => e.dispose());
-    bubbles.forEach((e) => e.dispose());
   }
 
   @override
@@ -72,7 +40,7 @@ class ChemistryLabBottleState extends State<ChemistryLabBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: ChemistryLabBottlePainter(waves: waves, bubbles: bubbles),
+            painter: ChemistryLabBottlePainter(waves: waves, bubbles: bubbles, waterLevel: waterLevel),
           ),
         ),
       ],
@@ -85,8 +53,9 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
   ChemistryLabBottlePainter(
       {Listenable? repaint,
       required List<WaveLayer> waves,
-      required List<Bubble> bubbles})
-      : super(repaint: repaint, waves: waves, bubbles: bubbles);
+      required List<Bubble> bubbles,
+      required double waterLevel})
+      : super(repaint: repaint, waves: waves, bubbles: bubbles, waterLevel: waterLevel);
 
   @override
   void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
