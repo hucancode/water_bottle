@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:waterbottle/sphericalBottle.dart';
+import 'package:waterbottle/triangularBottle.dart';
 import 'package:waterbottle/waterBottle.dart';
 
 void main() {
@@ -31,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final plainBottleRef = GlobalKey<WaterBottleState>();
   final chemistryBottleRef = GlobalKey<SphericalBottleState>();
+  final triangleBottleRef = GlobalKey<TriangularBottleState>();
   var waterLevel = 0.5;
   var selectedStyle = 0;
   @override
@@ -57,12 +59,17 @@ class _MyHomePageState extends State<MyHomePage> {
                     key: plainBottleRef, 
                     waterColor: Colors.blue, 
                     bottleColor: Colors.lightBlue,
-                    capColor: Colors.blueGrey):
+                    capColor: Colors.blueGrey):selectedStyle == 1?
                   SphericalBottle(
                     key: chemistryBottleRef,
                     waterColor: Colors.red,
                     bottleColor: Colors.redAccent,
-                    capColor: Colors.grey.shade700,),
+                    capColor: Colors.grey.shade700,):
+                  TriangularBottle(
+                    key: triangleBottleRef,
+                    waterColor: Colors.lime,
+                    bottleColor: Colors.limeAccent,
+                    capColor: Colors.red,),
               ),
             ),
             Spacer(),
@@ -73,12 +80,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
-                      child: Icon(Icons.local_drink)),
+                      child: Icon(Icons.crop_portrait)),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
-                      child: Icon(Icons.science)),
+                      child: Icon(Icons.circle_outlined)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
+                      child: Icon(Icons.change_history)),
                   ], 
-                  isSelected: List<bool>.generate(2, (index) => index == selectedStyle),
+                  isSelected: List<bool>.generate(3, (index) => index == selectedStyle),
                   onPressed: (index) => setState(() => selectedStyle = index)
                 ),
               ),
@@ -100,6 +110,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       waterLevel = value;
                       plainBottleRef.currentState?.waterLevel = waterLevel;
                       chemistryBottleRef.currentState?.waterLevel = waterLevel;
+                      triangleBottleRef.currentState?.waterLevel = waterLevel;
                     });
                   }
                 ),),
