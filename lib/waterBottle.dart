@@ -128,14 +128,14 @@ class WaterBottlePainter extends CustomPainter {
     for (var wave in waves) {
       paint.color = wave.color;
       final transform = Matrix4.identity();
-      final desiredW = 40 * size.width;
-      final desiredH = math.min(size.width, size.height);
+      final desiredW = 15 * size.width;
+      final desiredH = 0.1 * size.height;
       final translateRange = desiredW - size.width;
       final scaleX = desiredW / wave.svgData.getBounds().width;
       final scaleY = desiredH / wave.svgData.getBounds().height;
       final translateX = -wave.offset * translateRange;
-      final waterRange = size.height + size.width; // 0 = no water = size.height; 1 = full water = -size.width
-      final translateY = (1.0 - waterLevel) * waterRange - size.width;
+      final waterRange = size.height + desiredH; // 0 = no water = size.height; 1 = full water = -size.width
+      final translateY = (1.0 - waterLevel) * waterRange - desiredH;
       transform.translate(translateX, translateY);
       transform.scale(scaleX, scaleY);
       canvas.drawPath(wave.svgData.transform(transform.storage), paint);
