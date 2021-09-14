@@ -81,6 +81,7 @@ class ChemistryLabBottleState extends State<ChemistryLabBottle>
 }
 
 class ChemistryLabBottlePainter extends WaterBottlePainter {
+  static const BREAK_POINT = 1.2;
   ChemistryLabBottlePainter(
       {Listenable? repaint,
       required List<WaveLayer> waves,
@@ -90,6 +91,11 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
   @override
   void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
     final r = math.min(size.width, size.height);
+    if(size.height / size.width < BREAK_POINT)
+    {
+      canvas.drawCircle(Offset(size.width/2, size.height - r/2), r/2, paint);
+      return;
+    }
     final neckTop = size.width * 0.1;
     final neckBottom = size.height - r + 3;
     final neckRingOuter = size.width * 0.28;
@@ -111,7 +117,11 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
   @override
   void paintBottleMask(Canvas canvas, Size size, Paint paint) {
     final r = math.min(size.width, size.height);
-    canvas.drawCircle(Offset(r / 2, size.height - r / 2), r / 2 - 5, paint);
+    canvas.drawCircle(Offset(size.width/2, size.height - r / 2), r / 2 - 5, paint);
+    if(size.height / size.width < BREAK_POINT)
+    {
+      return;
+    }
     final neckTop = size.width * 0.1;
     final neckRingInner = size.width * 0.35;
     final neckRingInnerR = size.width - neckRingInner;
@@ -164,6 +174,9 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
 
   @override
   void paintCap(Canvas canvas, Size size, Paint paint) {
+    if(size.height / size.width < BREAK_POINT) {
+      return;
+    }
     final capTop = 0.0;
     final capBottom = size.width * 0.2;
     final capMid = (capBottom - capTop) / 2;
