@@ -92,7 +92,7 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
     final r = math.min(size.width, size.height);
     final neckTop = size.width * 0.1;
     final neckBottom = size.height - r + 3;
-    final neckRingOuter = size.width * 0.2;
+    final neckRingOuter = size.width * 0.28;
     final neckRingOuterR = size.width - neckRingOuter;
     final neckRingInner = size.width * 0.35;
     final neckRingInnerR = size.width - neckRingInner;
@@ -160,5 +160,25 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
         math.pi * 0.1,
         false,
         paint);
+  }
+
+  @override
+  void paintCap(Canvas canvas, Size size, Paint paint) {
+    final capTop = 0.0;
+    final capBottom = size.width * 0.2;
+    final capMid = (capBottom - capTop) / 2;
+    final capL = size.width * 0.33 + 5;
+    final capR = size.width - capL;
+    final neckRingInner = size.width * 0.35 + 5;
+    final neckRingInnerR = size.width - neckRingInner;
+    final path = Path();
+    path.moveTo(capL, capTop);
+    path.lineTo(neckRingInner, capMid);
+    path.lineTo(neckRingInner, capBottom);
+    path.lineTo(neckRingInnerR, capBottom);
+    path.lineTo(neckRingInnerR, capMid);
+    path.lineTo(capR, capTop);
+    path.close();
+    canvas.drawPath(path, paint);
   }
 }

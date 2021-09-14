@@ -121,20 +121,37 @@ class WaterBottlePainter extends CustomPainter {
       paintGlossyOverlay(canvas, size, paint);
     }
     canvas.restore();
+    {
+      final paint = Paint();
+      paint.blendMode = BlendMode.srcATop;
+      paint.style = PaintingStyle.fill;
+      paint.color = Colors.blueGrey;
+      paintCap(canvas, size, paint);
+    }
   }
 
   void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
+    final neckTop = size.width * 0.1;
+    final neckBottom = size.height;
+    final neckRingOuter = 0.0;
+    final neckRingOuterR = size.width - neckRingOuter;
+    final neckRingInner = size.width * 0.1;
+    final neckRingInnerR = size.width - neckRingInner;
     final path = Path();
-    path.moveTo(0, 0);
-    path.lineTo(0, size.height);
-    path.lineTo(size.width, size.height);
-    path.lineTo(size.width, 0);
+    path.moveTo(neckRingOuter, neckTop);
+    path.lineTo(neckRingInner, neckTop);
+    path.lineTo(neckRingInner, neckBottom);
+    path.lineTo(neckRingInnerR, neckBottom);
+    path.lineTo(neckRingInnerR, neckTop);
+    path.lineTo(neckRingOuterR, neckTop);
     canvas.drawPath(path, paint);
   }
 
   void paintBottleMask(Canvas canvas, Size size, Paint paint) {
+    final neckRingInner = size.width * 0.1;
+    final neckRingInnerR = size.width - neckRingInner;
     canvas.drawRect(
-        Rect.fromLTRB(5, 0, size.width - 5, size.height - 5), paint);
+        Rect.fromLTRB(neckRingInner + 5, 0, neckRingInnerR - 5, size.height - 5), paint);
   }
 
   void paintWaves(Canvas canvas, Size size, Paint paint) {
@@ -189,6 +206,25 @@ class WaterBottlePainter extends CustomPainter {
     paint.color = Colors.white;
     paint.shader = gradient;
     canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), paint);
+  }
+
+  void paintCap(Canvas canvas, Size size, Paint paint) {
+    final capTop = 0.0;
+    final capBottom = size.width * 0.2;
+    final capMid = (capBottom - capTop) / 2;
+    final capL = size.width * 0.08 + 5;
+    final capR = size.width - capL;
+    final neckRingInner = size.width * 0.1 + 5;
+    final neckRingInnerR = size.width - neckRingInner;
+    final path = Path();
+    path.moveTo(capL, capTop);
+    path.lineTo(neckRingInner, capMid);
+    path.lineTo(neckRingInner, capBottom);
+    path.lineTo(neckRingInnerR, capBottom);
+    path.lineTo(neckRingInnerR, capMid);
+    path.lineTo(capR, capTop);
+    path.close();
+    canvas.drawPath(path, paint);
   }
 
   @override

@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Center(
           child: SizedBox(
             width: 200,
-            height: 280,
+            height: 450,
             child: ChemistryLabBottle(color: Colors.blue),
           ),
         ),
