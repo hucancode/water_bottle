@@ -5,8 +5,10 @@ import 'package:waterbottle/waterContainer.dart';
 import 'package:waterbottle/wave.dart';
 
 class WaterBottle extends StatefulWidget {
-  final Color color;
-  WaterBottle({Key? key, this.color = Colors.blue}) : super(key: key);
+  final Color waterColor;
+  final Color bottleColor;
+  final Color capColor;
+  WaterBottle({Key? key, this.waterColor = Colors.blue, this.bottleColor = Colors.blue, this.capColor = Colors.blueGrey}) : super(key: key);
   @override
   WaterBottleState createState() => WaterBottleState();
 }
@@ -17,7 +19,7 @@ class WaterBottleState extends State<WaterBottle>
   @override
   void initState() {
     super.initState();
-    initWater(widget.color, this);
+    initWater(widget.waterColor, this);
     waves.first.animation.addListener(() {
         setState(() {});
     });
@@ -38,7 +40,13 @@ class WaterBottleState extends State<WaterBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: WaterBottlePainter(waves: waves, bubbles: bubbles, waterLevel: waterLevel),
+            painter: WaterBottlePainter(
+              waves: waves, 
+              bubbles: bubbles, 
+              waterLevel: waterLevel,
+              bottleColor: widget.bottleColor,
+              capColor: widget.capColor,
+              ),
           ),
         ),
       ],
@@ -50,16 +58,18 @@ class WaterBottlePainter extends CustomPainter {
   final List<WaveLayer> waves;
   final List<Bubble> bubbles;
   final waterLevel;
+  final bottleColor;
+  final capColor;
 
   WaterBottlePainter(
-      {Listenable? repaint, required this.waves, required this.bubbles, required this.waterLevel})
+      {Listenable? repaint, required this.waves, required this.bubbles, required this.waterLevel, required this.bottleColor, required this.capColor})
       : super(repaint: repaint);
 
   @override
   void paint(Canvas canvas, Size size) {
     {
       final paint = Paint();
-      paint.color = Colors.blue;
+      paint.color = bottleColor;
       paint.style = PaintingStyle.stroke;
       paint.strokeWidth = 3;
       paintEmptyBottle(canvas, size, paint);
@@ -95,7 +105,7 @@ class WaterBottlePainter extends CustomPainter {
       final paint = Paint();
       paint.blendMode = BlendMode.srcATop;
       paint.style = PaintingStyle.fill;
-      paint.color = Colors.blueGrey;
+      paint.color = capColor;
       paintCap(canvas, size, paint);
     }
   }

@@ -52,8 +52,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SizedBox(
                 width: 200,
                 height: 300,
-                child: selectedStyle == 0? WaterBottle(key: plainBottleRef, color: Colors.blue):
-                  ChemistryLabBottle(key: chemistryBottleRef, color: Colors.blue),
+                child: selectedStyle == 0? WaterBottle(key: plainBottleRef, waterColor: Colors.blue):
+                  ChemistryLabBottle(key: chemistryBottleRef, waterColor: Colors.blue),
               ),
             ),
             Spacer(),

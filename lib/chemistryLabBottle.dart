@@ -7,8 +7,10 @@ import 'package:waterbottle/waterContainer.dart';
 import 'package:waterbottle/wave.dart';
 
 class ChemistryLabBottle extends StatefulWidget {
-  final Color color;
-  ChemistryLabBottle({Key? key, this.color = Colors.blue}) : super(key: key);
+  final Color waterColor;
+  final Color bottleColor;
+  final Color capColor;
+  ChemistryLabBottle({Key? key, this.waterColor = Colors.blue, this.bottleColor = Colors.blue, this.capColor = Colors.blueGrey}) : super(key: key);
   @override
   ChemistryLabBottleState createState() => ChemistryLabBottleState();
 }
@@ -19,7 +21,7 @@ class ChemistryLabBottleState extends State<ChemistryLabBottle>
   @override
   void initState() {
     super.initState();
-    initWater(widget.color, this);
+    initWater(widget.waterColor, this);
     waves.first.animation.addListener(() {
         setState(() {});
     });
@@ -40,7 +42,12 @@ class ChemistryLabBottleState extends State<ChemistryLabBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: ChemistryLabBottlePainter(waves: waves, bubbles: bubbles, waterLevel: waterLevel),
+            painter: ChemistryLabBottlePainter(
+              waves: waves, 
+              bubbles: bubbles, 
+              waterLevel: waterLevel,
+              bottleColor: widget.bottleColor,
+              capColor: widget.capColor,),
           ),
         ),
       ],
@@ -54,8 +61,16 @@ class ChemistryLabBottlePainter extends WaterBottlePainter {
       {Listenable? repaint,
       required List<WaveLayer> waves,
       required List<Bubble> bubbles,
-      required double waterLevel})
-      : super(repaint: repaint, waves: waves, bubbles: bubbles, waterLevel: waterLevel);
+      required double waterLevel,
+      required Color bottleColor,
+      required Color capColor,
+      })
+      : super(repaint: repaint, 
+      waves: waves, 
+      bubbles: bubbles, 
+      waterLevel: waterLevel,
+      bottleColor: bottleColor,
+      capColor: capColor,);
 
   @override
   void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
