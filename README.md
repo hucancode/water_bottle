@@ -1,16 +1,28 @@
-# waterbottle
+# Water Bottle
 
-A new Flutter project.
+A beautiful water bottle for your project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Features
 
-A few resources to get you started if this is your first Flutter project:
+TODO: List what your package can do. Maybe include images, gifs, or videos.
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Getting started
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+TODO: List prerequisites and provide or point to information on how to
+start using the package.
+
+## Usage
+
+TODO: Include short and useful examples for package users. Add longer examples
+to `/example` folder. 
+
+```dart
+const like = 'sample';
+```
+
+## Additional information
+
+TODO: Tell users more about the package: where to find more information, how to 
+contribute to the package, how to file issues, what response they can expect 
+from the package authors, and more.
