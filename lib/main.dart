@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Spacer(flex: 2),
+            Spacer(),
             Center(
               child: SizedBox(
                 width: 200,
@@ -68,14 +68,19 @@ class _MyHomePageState extends State<MyHomePage> {
             Spacer(),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
-              child: Center(child: ToggleButtons(
-                children: [
-                  Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8), child: Icon(Icons.local_drink)),
-                  Padding(padding: EdgeInsets.symmetric(vertical: 5, horizontal: 8), child: Icon(Icons.science)),
-                ], 
-                isSelected: List<bool>.generate(2, (index) => index == selectedStyle),
-                onPressed: (index) => setState(() => selectedStyle = index)
-              ),
+              child: Center(
+                child: ToggleButtons(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
+                      child: Icon(Icons.local_drink)),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
+                      child: Icon(Icons.science)),
+                  ], 
+                  isSelected: List<bool>.generate(2, (index) => index == selectedStyle),
+                  onPressed: (index) => setState(() => selectedStyle = index)
+                ),
               ),
             ),
             Padding(
