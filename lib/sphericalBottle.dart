@@ -6,16 +6,16 @@ import 'package:waterbottle/waterBottle.dart';
 import 'package:waterbottle/waterContainer.dart';
 import 'package:waterbottle/wave.dart';
 
-class ChemistryLabBottle extends StatefulWidget {
+class SphericalBottle extends StatefulWidget {
   final Color waterColor;
   final Color bottleColor;
   final Color capColor;
-  ChemistryLabBottle({Key? key, this.waterColor = Colors.blue, this.bottleColor = Colors.blue, this.capColor = Colors.blueGrey}) : super(key: key);
+  SphericalBottle({Key? key, this.waterColor = Colors.blue, this.bottleColor = Colors.blue, this.capColor = Colors.blueGrey}) : super(key: key);
   @override
-  ChemistryLabBottleState createState() => ChemistryLabBottleState();
+  SphericalBottleState createState() => SphericalBottleState();
 }
 
-class ChemistryLabBottleState extends State<ChemistryLabBottle>
+class SphericalBottleState extends State<SphericalBottle>
     with TickerProviderStateMixin, WaterContainer  {
 
   @override
@@ -42,7 +42,7 @@ class ChemistryLabBottleState extends State<ChemistryLabBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: ChemistryLabBottlePainter(
+            painter: SphericalBottlePainter(
               waves: waves, 
               bubbles: bubbles, 
               waterLevel: waterLevel,
@@ -55,9 +55,9 @@ class ChemistryLabBottleState extends State<ChemistryLabBottle>
   }
 }
 
-class ChemistryLabBottlePainter extends WaterBottlePainter {
+class SphericalBottlePainter extends WaterBottlePainter {
   static const BREAK_POINT = 1.2;
-  ChemistryLabBottlePainter(
+  SphericalBottlePainter(
       {Listenable? repaint,
       required List<WaveLayer> waves,
       required List<Bubble> bubbles,

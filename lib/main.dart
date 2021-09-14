@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:waterbottle/chemistryLabBottle.dart';
+import 'package:waterbottle/sphericalBottle.dart';
 import 'package:waterbottle/waterBottle.dart';
 
 void main() {
@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final plainBottleRef = GlobalKey<WaterBottleState>();
-  final chemistryBottleRef = GlobalKey<ChemistryLabBottleState>();
+  final chemistryBottleRef = GlobalKey<SphericalBottleState>();
   var waterLevel = 0.5;
   var selectedStyle = 0;
   @override
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 width: 200,
                 height: 300,
                 child: selectedStyle == 0? WaterBottle(key: plainBottleRef, waterColor: Colors.blue):
-                  ChemistryLabBottle(key: chemistryBottleRef, waterColor: Colors.blue),
+                  SphericalBottle(key: chemistryBottleRef, waterColor: Colors.blue),
               ),
             ),
             Spacer(),
