@@ -2,27 +2,38 @@
 
 A beautiful water bottle for your project.
 
-
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+This library add a bottle widget to your screen. You can use it as a loading indicator, a progress tracker, or any kind of measurement suits your needs.
 
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+![Plain](readme/cup_org.gif)
+![Sphere](readme/sphere_org.gif)
+![Triangle](readme/triangle_org.gif)
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+To use this library, add `water_bottle` as a [https://flutter.dev/docs/development/platform-integration/platform-channels](dependency in your pubspec.yaml) file.
 
+Import it where you need
 ```dart
-const like = 'sample';
+import 'package:water_bottle/water_bottle.dart';
 ```
+Build bottle widget
+```dart
+final plainBottleRef = GlobalKey<WaterBottleState>();
+WaterBottle(
+    key: plainBottleRef, 
+    waterColor: Colors.blue, 
+    bottleColor: Colors.lightBlue,
+    capColor: Colors.blueGrey
+)
+```
+Update widget
+```dart
+plainBottleRef.currentState?.waterLevel = 0.5;// 0.0~1.0
+```
+For more please refer `/example` folder
 
 ## Additional information
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+For more information, or contribution, please refer to the original [https://github.com/hucancode/water_bottle](github)
