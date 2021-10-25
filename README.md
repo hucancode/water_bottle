@@ -12,7 +12,7 @@ This library add a bottle widget to your screen. You can use it as a loading ind
 
 ## Usage
 
-To use this library, add `water_bottle` as a [https://flutter.dev/docs/development/platform-integration/platform-channels](dependency in your pubspec.yaml) file.
+To use this library, add `water_bottle` as a [dependency in your pubspec.yaml](https://flutter.dev/docs/development/platform-integration/platform-channels) file.
 
 Import it where you need
 ```dart
@@ -36,4 +36,4 @@ For more please refer `/example` folder
 
 ## Additional information
 
-For more information, or contribution, please refer to the original [https://github.com/hucancode/water_bottle](github)
+For more information, or contribution, please refer to the original [github](https://github.com/hucancode/water_bottle)
