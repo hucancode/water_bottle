@@ -6,9 +6,9 @@ A beautiful water bottle for your project.
 
 This library add a bottle widget to your screen. You can use it as a loading indicator, a progress tracker, or any kind of measurement suits your needs.
 
-![Plain](readme/cup_org.gif)
-![Sphere](readme/sphere_org.gif)
-![Triangle](readme/triangle_org.gif)
+![Plain](readme/cup.gif)
+![Sphere](readme/sphere.gif)
+![Triangle](readme/triangle.gif)
 
 ## Usage
 
