@@ -10,20 +10,24 @@ class SphericalBottle extends StatefulWidget {
   final Color waterColor;
   final Color bottleColor;
   final Color capColor;
-  SphericalBottle({Key? key, this.waterColor = Colors.blue, this.bottleColor = Colors.blue, this.capColor = Colors.blueGrey}) : super(key: key);
+  SphericalBottle(
+      {Key? key,
+      this.waterColor = Colors.blue,
+      this.bottleColor = Colors.blue,
+      this.capColor = Colors.blueGrey})
+      : super(key: key);
   @override
   SphericalBottleState createState() => SphericalBottleState();
 }
 
 class SphericalBottleState extends State<SphericalBottle>
-    with TickerProviderStateMixin, WaterContainer  {
-
+    with TickerProviderStateMixin, WaterContainer {
   @override
   void initState() {
     super.initState();
     initWater(widget.waterColor, this);
     waves.first.animation.addListener(() {
-        setState(() {});
+      setState(() {});
     });
   }
 
@@ -43,11 +47,12 @@ class SphericalBottleState extends State<SphericalBottle>
           aspectRatio: 1 / 1,
           child: CustomPaint(
             painter: SphericalBottlePainter(
-              waves: waves, 
-              bubbles: bubbles, 
+              waves: waves,
+              bubbles: bubbles,
               waterLevel: waterLevel,
               bottleColor: widget.bottleColor,
-              capColor: widget.capColor,),
+              capColor: widget.capColor,
+            ),
           ),
         ),
       ],
@@ -57,27 +62,28 @@ class SphericalBottleState extends State<SphericalBottle>
 
 class SphericalBottlePainter extends WaterBottlePainter {
   static const BREAK_POINT = 1.2;
-  SphericalBottlePainter(
-      {Listenable? repaint,
-      required List<WaveLayer> waves,
-      required List<Bubble> bubbles,
-      required double waterLevel,
-      required Color bottleColor,
-      required Color capColor,
-      })
-      : super(repaint: repaint, 
-      waves: waves, 
-      bubbles: bubbles, 
-      waterLevel: waterLevel,
-      bottleColor: bottleColor,
-      capColor: capColor,);
+  SphericalBottlePainter({
+    Listenable? repaint,
+    required List<WaveLayer> waves,
+    required List<Bubble> bubbles,
+    required double waterLevel,
+    required Color bottleColor,
+    required Color capColor,
+  }) : super(
+          repaint: repaint,
+          waves: waves,
+          bubbles: bubbles,
+          waterLevel: waterLevel,
+          bottleColor: bottleColor,
+          capColor: capColor,
+        );
 
   @override
   void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
     final r = math.min(size.width, size.height);
-    if(size.height / size.width < BREAK_POINT)
-    {
-      canvas.drawCircle(Offset(size.width/2, size.height - r/2), r/2, paint);
+    if (size.height / size.width < BREAK_POINT) {
+      canvas.drawCircle(
+          Offset(size.width / 2, size.height - r / 2), r / 2, paint);
       return;
     }
     final neckTop = size.width * 0.1;
@@ -101,9 +107,9 @@ class SphericalBottlePainter extends WaterBottlePainter {
   @override
   void paintBottleMask(Canvas canvas, Size size, Paint paint) {
     final r = math.min(size.width, size.height);
-    canvas.drawCircle(Offset(size.width/2, size.height - r / 2), r / 2 - 5, paint);
-    if(size.height / size.width < BREAK_POINT)
-    {
+    canvas.drawCircle(
+        Offset(size.width / 2, size.height - r / 2), r / 2 - 5, paint);
+    if (size.height / size.width < BREAK_POINT) {
       return;
     }
     final neckTop = size.width * 0.1;
@@ -158,7 +164,7 @@ class SphericalBottlePainter extends WaterBottlePainter {
 
   @override
   void paintCap(Canvas canvas, Size size, Paint paint) {
-    if(size.height / size.width < BREAK_POINT) {
+    if (size.height / size.width < BREAK_POINT) {
       return;
     }
     final capTop = 0.0;

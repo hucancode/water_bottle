@@ -52,22 +52,25 @@ class _MyHomePageState extends State<MyHomePage> {
               child: SizedBox(
                 width: 200,
                 height: 300,
-                child: selectedStyle == 0? 
-                  WaterBottle(
-                    key: plainBottleRef, 
-                    waterColor: Colors.blue, 
-                    bottleColor: Colors.lightBlue,
-                    capColor: Colors.blueGrey):selectedStyle == 1?
-                  SphericalBottle(
-                    key: chemistryBottleRef,
-                    waterColor: Colors.red,
-                    bottleColor: Colors.redAccent,
-                    capColor: Colors.grey.shade700,):
-                  TriangularBottle(
-                    key: triangleBottleRef,
-                    waterColor: Colors.lime,
-                    bottleColor: Colors.limeAccent,
-                    capColor: Colors.red,),
+                child: selectedStyle == 0
+                    ? WaterBottle(
+                        key: plainBottleRef,
+                        waterColor: Colors.blue,
+                        bottleColor: Colors.lightBlue,
+                        capColor: Colors.blueGrey)
+                    : selectedStyle == 1
+                        ? SphericalBottle(
+                            key: chemistryBottleRef,
+                            waterColor: Colors.red,
+                            bottleColor: Colors.redAccent,
+                            capColor: Colors.grey.shade700,
+                          )
+                        : TriangularBottle(
+                            key: triangleBottleRef,
+                            waterColor: Colors.lime,
+                            bottleColor: Colors.limeAccent,
+                            capColor: Colors.red,
+                          ),
               ),
             ),
             Spacer(),
@@ -75,45 +78,54 @@ class _MyHomePageState extends State<MyHomePage> {
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
               child: Center(
                 child: ToggleButtons(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
-                      child: Icon(Icons.crop_portrait)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
-                      child: Icon(Icons.circle_outlined)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30), 
-                      child: Icon(Icons.change_history)),
-                  ], 
-                  isSelected: List<bool>.generate(3, (index) => index == selectedStyle),
-                  onPressed: (index) => setState(() => selectedStyle = index)
-                ),
+                    children: [
+                      Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                          child: Icon(Icons.crop_portrait)),
+                      Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                          child: Icon(Icons.circle_outlined)),
+                      Padding(
+                          padding:
+                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+                          child: Icon(Icons.change_history)),
+                    ],
+                    isSelected: List<bool>.generate(
+                        3, (index) => index == selectedStyle),
+                    onPressed: (index) =>
+                        setState(() => selectedStyle = index)),
               ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
               child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.opacity),
-                SizedBox(width: 10),
-                Expanded(child: Slider(
-                  value: waterLevel, 
-                  max: 1.0,
-                  min: 0.0,
-                  onChanged: (value) {
-                    setState(() {
-                      waterLevel = value;
-                      plainBottleRef.currentState?.waterLevel = waterLevel;
-                      chemistryBottleRef.currentState?.waterLevel = waterLevel;
-                      triangleBottleRef.currentState?.waterLevel = waterLevel;
-                    });
-                  }
-                ),),
-              ],
-            ),),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.opacity),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: Slider(
+                        value: waterLevel,
+                        max: 1.0,
+                        min: 0.0,
+                        onChanged: (value) {
+                          setState(() {
+                            waterLevel = value;
+                            plainBottleRef.currentState?.waterLevel =
+                                waterLevel;
+                            chemistryBottleRef.currentState?.waterLevel =
+                                waterLevel;
+                            triangleBottleRef.currentState?.waterLevel =
+                                waterLevel;
+                          });
+                        }),
+                  ),
+                ],
+              ),
+            ),
             Spacer(),
           ],
         ),

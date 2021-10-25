@@ -1,8 +1,8 @@
 name: water_bottle
-description: A beautiful bottle for your project.
+description: This library add a bottle widget to your screen. You can use it as a loading indicator, a progress tracker, or any kind of measurement suits your needs.
 homepage: https://github.com/hucancode/water_bottle
 
-version: 0.0.4
+version: 0.0.5
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

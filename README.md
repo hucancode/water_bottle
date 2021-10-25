@@ -1,7 +1,5 @@
 # Water Bottle
 
-A beautiful water bottle for your project.
-
 ## Features
 
 This library add a bottle widget to your screen. You can use it as a loading indicator, a progress tracker, or any kind of measurement suits your needs.

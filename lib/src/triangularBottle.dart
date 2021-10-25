@@ -10,20 +10,24 @@ class TriangularBottle extends StatefulWidget {
   final Color waterColor;
   final Color bottleColor;
   final Color capColor;
-  TriangularBottle({Key? key, this.waterColor = Colors.blue, this.bottleColor = Colors.blue, this.capColor = Colors.blueGrey}) : super(key: key);
+  TriangularBottle(
+      {Key? key,
+      this.waterColor = Colors.blue,
+      this.bottleColor = Colors.blue,
+      this.capColor = Colors.blueGrey})
+      : super(key: key);
   @override
   TriangularBottleState createState() => TriangularBottleState();
 }
 
 class TriangularBottleState extends State<TriangularBottle>
-    with TickerProviderStateMixin, WaterContainer  {
-
+    with TickerProviderStateMixin, WaterContainer {
   @override
   void initState() {
     super.initState();
     initWater(widget.waterColor, this);
     waves.first.animation.addListener(() {
-        setState(() {});
+      setState(() {});
     });
   }
 
@@ -43,11 +47,12 @@ class TriangularBottleState extends State<TriangularBottle>
           aspectRatio: 1 / 1,
           child: CustomPaint(
             painter: TriangularBottleStatePainter(
-              waves: waves, 
-              bubbles: bubbles, 
+              waves: waves,
+              bubbles: bubbles,
               waterLevel: waterLevel,
               bottleColor: widget.bottleColor,
-              capColor: widget.capColor,),
+              capColor: widget.capColor,
+            ),
           ),
         ),
       ],
@@ -57,20 +62,21 @@ class TriangularBottleState extends State<TriangularBottle>
 
 class TriangularBottleStatePainter extends WaterBottlePainter {
   static const BREAK_POINT = 1.2;
-  TriangularBottleStatePainter(
-      {Listenable? repaint,
-      required List<WaveLayer> waves,
-      required List<Bubble> bubbles,
-      required double waterLevel,
-      required Color bottleColor,
-      required Color capColor,
-      })
-      : super(repaint: repaint, 
-      waves: waves, 
-      bubbles: bubbles, 
-      waterLevel: waterLevel,
-      bottleColor: bottleColor,
-      capColor: capColor,);
+  TriangularBottleStatePainter({
+    Listenable? repaint,
+    required List<WaveLayer> waves,
+    required List<Bubble> bubbles,
+    required double waterLevel,
+    required Color bottleColor,
+    required Color capColor,
+  }) : super(
+          repaint: repaint,
+          waves: waves,
+          bubbles: bubbles,
+          waterLevel: waterLevel,
+          bottleColor: bottleColor,
+          capColor: capColor,
+        );
 
   @override
   void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
@@ -89,10 +95,10 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
     path.moveTo(neckRingOuter, neckTop);
     path.lineTo(neckRingInner, neckTop);
     path.lineTo(neckRingInner, neckBottom);
-    if(SMOOTH_CORNER) {
-      final bodyLAX = (neckRingInner - bodyL)*0.1+bodyL;
-      final bodyLAY = (bodyBottom - neckBottom)*0.9 + neckBottom;
-      final bodyLBX = (bodyR - bodyL)*0.1+bodyL;
+    if (SMOOTH_CORNER) {
+      final bodyLAX = (neckRingInner - bodyL) * 0.1 + bodyL;
+      final bodyLAY = (bodyBottom - neckBottom) * 0.9 + neckBottom;
+      final bodyLBX = (bodyR - bodyL) * 0.1 + bodyL;
       final bodyLBY = bodyBottom;
       final bodyRAX = size.width - bodyLAX;
       final bodyRAY = bodyLAY;
@@ -102,8 +108,7 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
       path.conicTo(bodyL, bodyBottom, bodyLBX, bodyLBY, 1);
       path.lineTo(bodyRBX, bodyRBY);
       path.conicTo(bodyR, bodyBottom, bodyRAX, bodyRAY, 1);
-    }
-    else {
+    } else {
       path.lineTo(bodyL, bodyBottom);
       path.lineTo(bodyR, bodyBottom);
     }
@@ -127,10 +132,10 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
     final path = Path();
     path.moveTo(neckRingInner, neckTop);
     path.lineTo(neckRingInner, neckBottom);
-    if(SMOOTH_CORNER) {
-      final bodyLAX = (neckRingInner - bodyL)*0.1+bodyL;
-      final bodyLAY = (bodyBottom - neckBottom)*0.9 + neckBottom;
-      final bodyLBX = (bodyR - bodyL)*0.1+bodyL;
+    if (SMOOTH_CORNER) {
+      final bodyLAX = (neckRingInner - bodyL) * 0.1 + bodyL;
+      final bodyLAY = (bodyBottom - neckBottom) * 0.9 + neckBottom;
+      final bodyLBX = (bodyR - bodyL) * 0.1 + bodyL;
       final bodyLBY = bodyBottom;
       final bodyRAX = size.width - bodyLAX;
       final bodyRAY = bodyLAY;
@@ -140,8 +145,7 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
       path.conicTo(bodyL, bodyBottom, bodyLBX, bodyLBY, 1);
       path.lineTo(bodyRBX, bodyRBY);
       path.conicTo(bodyR, bodyBottom, bodyRAX, bodyRAY, 1);
-    }
-    else {
+    } else {
       path.lineTo(bodyL, bodyBottom);
       path.lineTo(bodyR, bodyBottom);
     }
@@ -172,7 +176,7 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
 
   @override
   void paintCap(Canvas canvas, Size size, Paint paint) {
-    if(size.height / size.width < BREAK_POINT) {
+    if (size.height / size.width < BREAK_POINT) {
       return;
     }
     final capTop = 0.0;
