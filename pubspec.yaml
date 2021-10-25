@@ -2,7 +2,7 @@ name: water_bottle
 description: A beautiful bottle for your project.
 homepage: https://github.com/hucancode/water_bottle
 
-version: 0.0.1
+version: 0.0.2
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
