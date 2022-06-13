@@ -1,8 +1,5 @@
 import 'dart:math' as math;
-import 'package:flutter/animation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 
 class Bubble {
   late Animation<double> positionAnimation;
@@ -20,10 +17,10 @@ class Bubble {
 
   void init(TickerProvider provider) {
     this.provider = provider;
-    // controller = AnimationController(
-    //     vsync: provider,
-    //     duration: Duration(milliseconds: 10000),
-    // );
+    controller = AnimationController(
+      vsync: provider,
+      duration: Duration(milliseconds: 10000),
+    );
   }
 
   void dispose() {
@@ -58,10 +55,8 @@ class Bubble {
   }
 
   void randomize() {
-    controller = AnimationController(
-      vsync: provider,
-      duration: Duration(milliseconds: math.Random().nextInt(7000) + 3000),
-    );
+    controller.duration =
+        Duration(milliseconds: math.Random().nextInt(7000) + 3000);
     initialColor = HSLColor.fromAHSL(
             1.0,
             math.Random().nextDouble(),

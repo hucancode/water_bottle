@@ -1,3 +1,9 @@
+## 0.0.6
+
+* Fix memory leak when creating bubble animations
+* Upgrade to `path_parsing` version `1.0.0`
+* Code format
+
 ## 0.0.5
 
 * Code format

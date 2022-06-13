@@ -1,10 +1,9 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'bubble.dart';
-import 'waterBottle.dart';
+import 'water_bottle.dart';
 import 'wave.dart';
-import 'waterContainer.dart';
+import 'water_container.dart';
 
 class TriangularBottle extends StatefulWidget {
   final Color waterColor;

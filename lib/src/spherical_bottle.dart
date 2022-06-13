@@ -1,15 +1,19 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'bubble.dart';
-import 'waterBottle.dart';
-import 'waterContainer.dart';
+import 'water_bottle.dart';
+import 'water_container.dart';
 import 'wave.dart';
 
 class SphericalBottle extends StatefulWidget {
   final Color waterColor;
   final Color bottleColor;
   final Color capColor;
+
+  /// Create a spherical bottle, you can customize it's part with
+  // [waterColor], [bottleColor], [capColor].
+  // Note that if the width/height ratio get small enough,
+  // the bottle will automatically reduce it's neck
   SphericalBottle(
       {Key? key,
       this.waterColor = Colors.blue,
@@ -61,6 +65,7 @@ class SphericalBottleState extends State<SphericalBottle>
 }
 
 class SphericalBottlePainter extends WaterBottlePainter {
+  // At which point should we cut off the neck of the bottle
   static const BREAK_POINT = 1.2;
   SphericalBottlePainter({
     Listenable? repaint,

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'waterContainer.dart';
+import 'water_container.dart';
 import 'wave.dart';
 import 'bubble.dart';
 
@@ -8,6 +8,9 @@ class WaterBottle extends StatefulWidget {
   final Color waterColor;
   final Color bottleColor;
   final Color capColor;
+
+  /// Create a regular bottle, you can customize it's part with
+  // [waterColor], [bottleColor], [capColor].
   WaterBottle(
       {Key? key,
       this.waterColor = Colors.blue,
@@ -61,6 +64,7 @@ class WaterBottleState extends State<WaterBottle>
 class WaterBottlePainter extends CustomPainter {
   final List<WaveLayer> waves;
   final List<Bubble> bubbles;
+  // You can set water level with [waterLevel], 0 = no water, 1 = full water
   final waterLevel;
   final bottleColor;
   final capColor;

@@ -1,3 +1,3 @@
-export 'src/waterBottle.dart';
-export 'src/sphericalBottle.dart';
-export 'src/triangularBottle.dart';
+export 'src/water_bottle.dart';
+export 'src/spherical_bottle.dart';
+export 'src/triangular_bottle.dart';
