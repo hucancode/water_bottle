@@ -6,8 +6,13 @@ import 'wave.dart';
 import 'water_container.dart';
 
 class TriangularBottle extends StatefulWidget {
+  /// Color of the water
   final Color waterColor;
+
+  /// Color of the bottle
   final Color bottleColor;
+
+  /// Color of the bottle cap
   final Color capColor;
   TriangularBottle(
       {Key? key,

@@ -6,14 +6,19 @@ import 'water_container.dart';
 import 'wave.dart';
 
 class SphericalBottle extends StatefulWidget {
+  /// Color of the water
   final Color waterColor;
+
+  /// Color of the bottle
   final Color bottleColor;
+
+  /// Color of the bottle cap
   final Color capColor;
 
   /// Create a spherical bottle, you can customize it's part with
-  // [waterColor], [bottleColor], [capColor].
-  // Note that if the width/height ratio get small enough,
-  // the bottle will automatically reduce it's neck
+  /// [waterColor], [bottleColor], [capColor].
+  /// Note that if the width/height ratio get small enough,
+  /// the bottle will automatically reduce it's neck
   SphericalBottle(
       {Key? key,
       this.waterColor = Colors.blue,

@@ -30,13 +30,22 @@ class PathWriter extends PathProxy {
 }
 
 class WaveLayer {
+  /// Animations
   late final Animation<double> animation;
+
+  /// Animation controller
   late final AnimationController controller;
+
+  /// SVG data
   final svgData = Path();
+
+  /// Wave color
   Color color = Colors.blueGrey;
 
+  /// Current offset
   double get offset => animation.value;
 
+  /// Setup animations
   void init(TickerProvider provider, {int frequency = 10}) {
     controller = AnimationController(
       vsync: provider,
@@ -56,6 +65,7 @@ class WaveLayer {
     buildPath();
   }
 
+  /// Clean up
   void dispose() {
     controller.dispose();
   }

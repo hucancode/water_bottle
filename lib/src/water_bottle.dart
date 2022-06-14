@@ -5,12 +5,17 @@ import 'wave.dart';
 import 'bubble.dart';
 
 class WaterBottle extends StatefulWidget {
+  /// Color of the water
   final Color waterColor;
+
+  /// Color of the bottle
   final Color bottleColor;
+
+  /// Color of the bottle cap
   final Color capColor;
 
   /// Create a regular bottle, you can customize it's part with
-  // [waterColor], [bottleColor], [capColor].
+  /// [waterColor], [bottleColor], [capColor].
   WaterBottle(
       {Key? key,
       this.waterColor = Colors.blue,
@@ -62,11 +67,19 @@ class WaterBottleState extends State<WaterBottle>
 }
 
 class WaterBottlePainter extends CustomPainter {
+  /// Holds all wave object instances
   final List<WaveLayer> waves;
+
+  /// Holds all bubble object instances
   final List<Bubble> bubbles;
-  // You can set water level with [waterLevel], 0 = no water, 1 = full water
+
+  /// Water level, 0 = no water, 1 = full water
   final waterLevel;
+
+  /// Bottle color
   final bottleColor;
+
+  /// Bottle cap color
   final capColor;
 
   WaterBottlePainter(

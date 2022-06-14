@@ -2,19 +2,38 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 class Bubble {
+  /// Bubble animations
   late Animation<double> positionAnimation;
+
+  /// Bubble animations
   late Animation<double> opacityAnimation;
+
+  /// Bubble animations
   late Animation<double> sizeAnimation;
+
+  /// Bubble animation controller
   late AnimationController controller;
   late TickerProvider provider;
+
+  /// X position
   double initialX = 0;
+
+  /// Starting color
   Color initialColor = Colors.blueGrey;
 
+  /// Current color
   Color get color => initialColor.withAlpha(opacityAnimation.value.toInt());
+
+  /// Current X position
   double get x => initialX;
+
+  /// Current Y position
   double get y => positionAnimation.value;
+
+  /// Current size
   double get size => sizeAnimation.value;
 
+  /// Setup animations
   void init(TickerProvider provider) {
     this.provider = provider;
     controller = AnimationController(
@@ -23,10 +42,12 @@ class Bubble {
     );
   }
 
+  /// Clean up
   void dispose() {
     controller.dispose();
   }
 
+  /// Get a random easing method
   Curve randomCurve() {
     switch (math.Random().nextInt(5)) {
       case 0:
@@ -54,6 +75,7 @@ class Bubble {
     return Curves.linear;
   }
 
+  /// Randomize bubble behavior, run at initialization or respawn
   void randomize() {
     controller.duration =
         Duration(milliseconds: math.Random().nextInt(7000) + 3000);

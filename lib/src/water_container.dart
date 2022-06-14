@@ -4,13 +4,22 @@ import 'bubble.dart';
 import 'wave.dart';
 
 class WaterContainer {
+  /// Holds all wave object instances
   List<WaveLayer> waves = List<WaveLayer>.empty(growable: true);
+
+  /// Holds all bubble object instances
   List<Bubble> bubbles = List<Bubble>.empty(growable: true);
+
+  /// How many wave layer do we need, default 3
   static const WAVE_COUNT = 3;
+
+  /// How many bubbles can exist at the same time? The more the expensive, default 10
   static const BUBBLE_COUNT = 10;
-  // You can set water level with [waterLevel]. 0 = no water, 1 = full water
+
+  /// You can set water level with [waterLevel]. 0 = no water, 1 = full water
   double waterLevel = 0.5;
 
+  /// Instantiate wave and bubble objects
   void initWater(Color themeColor, TickerProvider ticker) {
     var f = math.Random().nextInt(5000) + 15000;
     var d = math.Random().nextInt(500) + 1500;
@@ -34,6 +43,7 @@ class WaterContainer {
     }
   }
 
+  /// Kill wave and bubble objects
   void disposeWater() {
     waves.forEach((e) => e.dispose());
     bubbles.forEach((e) => e.dispose());

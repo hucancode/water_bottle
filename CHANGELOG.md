@@ -1,3 +1,7 @@
+## 0.0.7
+
+* Add documentation
+
 ## 0.0.6
 
 * Fix memory leak when creating bubble animations

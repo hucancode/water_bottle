@@ -29,12 +29,91 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final plainBottleRef = GlobalKey<WaterBottleState>();
-  final chemistryBottleRef = GlobalKey<SphericalBottleState>();
+  final sphereBottleRef = GlobalKey<SphericalBottleState>();
   final triangleBottleRef = GlobalKey<TriangularBottleState>();
   var waterLevel = 0.5;
   var selectedStyle = 0;
   @override
   Widget build(BuildContext context) {
+    final plain = WaterBottle(
+        key: plainBottleRef,
+        waterColor: Colors.blue,
+        bottleColor: Colors.lightBlue,
+        capColor: Colors.blueGrey);
+    final sphere = SphericalBottle(
+      key: sphereBottleRef,
+      waterColor: Colors.red,
+      bottleColor: Colors.redAccent,
+      capColor: Colors.grey.shade700,
+    );
+    final triangle = TriangularBottle(
+      key: triangleBottleRef,
+      waterColor: Colors.lime,
+      bottleColor: Colors.limeAccent,
+      capColor: Colors.red,
+    );
+    final bottle = Center(
+      child: SizedBox(
+        width: 200,
+        height: 300,
+        child: selectedStyle == 0
+            ? plain
+            : selectedStyle == 1
+                ? sphere
+                : triangle,
+      ),
+    );
+    final stylePicker = Padding(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+      child: Center(
+        child: ToggleButtons(
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              child: Icon(Icons.crop_portrait),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              child: Icon(Icons.circle_outlined),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              child: Icon(Icons.change_history),
+            ),
+          ],
+          isSelected: List<bool>.generate(3, (index) => index == selectedStyle),
+          onPressed: (index) => setState(() => selectedStyle = index),
+        ),
+      ),
+    );
+    final waterSlider = Padding(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(Icons.opacity),
+          SizedBox(width: 10),
+          Expanded(
+            child: Slider(
+              value: waterLevel,
+              max: 1.0,
+              min: 0.0,
+              onChanged: (value) {
+                setState(
+                  () {
+                    waterLevel = value;
+                    plainBottleRef.currentState?.waterLevel = waterLevel;
+                    sphereBottleRef.currentState?.waterLevel = waterLevel;
+                    triangleBottleRef.currentState?.waterLevel = waterLevel;
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -48,84 +127,10 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Spacer(),
-            Center(
-              child: SizedBox(
-                width: 200,
-                height: 300,
-                child: selectedStyle == 0
-                    ? WaterBottle(
-                        key: plainBottleRef,
-                        waterColor: Colors.blue,
-                        bottleColor: Colors.lightBlue,
-                        capColor: Colors.blueGrey)
-                    : selectedStyle == 1
-                        ? SphericalBottle(
-                            key: chemistryBottleRef,
-                            waterColor: Colors.red,
-                            bottleColor: Colors.redAccent,
-                            capColor: Colors.grey.shade700,
-                          )
-                        : TriangularBottle(
-                            key: triangleBottleRef,
-                            waterColor: Colors.lime,
-                            bottleColor: Colors.limeAccent,
-                            capColor: Colors.red,
-                          ),
-              ),
-            ),
+            bottle,
             Spacer(),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
-              child: Center(
-                child: ToggleButtons(
-                    children: [
-                      Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                          child: Icon(Icons.crop_portrait)),
-                      Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                          child: Icon(Icons.circle_outlined)),
-                      Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 5, horizontal: 30),
-                          child: Icon(Icons.change_history)),
-                    ],
-                    isSelected: List<bool>.generate(
-                        3, (index) => index == selectedStyle),
-                    onPressed: (index) =>
-                        setState(() => selectedStyle = index)),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(Icons.opacity),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Slider(
-                        value: waterLevel,
-                        max: 1.0,
-                        min: 0.0,
-                        onChanged: (value) {
-                          setState(() {
-                            waterLevel = value;
-                            plainBottleRef.currentState?.waterLevel =
-                                waterLevel;
-                            chemistryBottleRef.currentState?.waterLevel =
-                                waterLevel;
-                            triangleBottleRef.currentState?.waterLevel =
-                                waterLevel;
-                          });
-                        }),
-                  ),
-                ],
-              ),
-            ),
+            stylePicker,
+            waterSlider,
             Spacer(),
           ],
         ),
