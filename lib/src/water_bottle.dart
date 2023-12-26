@@ -32,9 +32,6 @@ class WaterBottleState extends State<WaterBottle>
   void initState() {
     super.initState();
     initWater(widget.waterColor, this);
-    waves.first.animation.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
@@ -45,6 +42,14 @@ class WaterBottleState extends State<WaterBottle>
 
   @override
   Widget build(BuildContext context) {
+    final painter = WaterBottlePainter(
+      repaint: waves.first.animation,
+      waves: waves,
+      bubbles: bubbles,
+      waterLevel: waterLevel,
+      bottleColor: widget.bottleColor,
+      capColor: widget.capColor,
+    );
     return Stack(
       fit: StackFit.expand,
       clipBehavior: Clip.hardEdge,
@@ -52,13 +57,7 @@ class WaterBottleState extends State<WaterBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: WaterBottlePainter(
-              waves: waves,
-              bubbles: bubbles,
-              waterLevel: waterLevel,
-              bottleColor: widget.bottleColor,
-              capColor: widget.capColor,
-            ),
+            painter: painter,
           ),
         ),
       ],
@@ -67,6 +66,15 @@ class WaterBottleState extends State<WaterBottle>
 }
 
 class WaterBottlePainter extends CustomPainter {
+  int repaintCount = 0;
+  var lastPaintTimestamp = DateTime.now();
+  final brushBottle = Paint();
+  final brushBottleMask = Paint();
+  final brushWave = Paint();
+  final brushBubble = Paint();
+  final brushGlossy = Paint();
+  final brushCap = Paint();
+
   /// Holds all wave object instances
   final List<WaveLayer> waves;
 
@@ -89,54 +97,41 @@ class WaterBottlePainter extends CustomPainter {
       required this.waterLevel,
       required this.bottleColor,
       required this.capColor})
-      : super(repaint: repaint);
+      : super(repaint: repaint) {
+    brushBottle.color = bottleColor;
+    brushBottle.style = PaintingStyle.stroke;
+    brushBottle.strokeWidth = 3;
+    brushBottleMask.color = Colors.white;
+    brushBottleMask.style = PaintingStyle.fill;
+    brushWave.blendMode = BlendMode.srcIn;
+    brushWave.style = PaintingStyle.fill;
+    brushBubble.blendMode = BlendMode.srcATop;
+    brushBubble.style = PaintingStyle.fill;
+    brushGlossy.blendMode = BlendMode.srcATop;
+    brushGlossy.style = PaintingStyle.fill;
+    brushCap.blendMode = BlendMode.srcATop;
+    brushCap.style = PaintingStyle.fill;
+    brushCap.color = capColor;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-    {
-      final paint = Paint();
-      paint.color = bottleColor;
-      paint.style = PaintingStyle.stroke;
-      paint.strokeWidth = 3;
-      paintEmptyBottle(canvas, size, paint);
-    }
-    {
-      final paint = Paint();
-      paint.color = Colors.white;
-      paint.style = PaintingStyle.fill;
-      final rect = Rect.fromLTRB(0, 0, size.width, size.height);
-      canvas.saveLayer(rect, paint);
-      paintBottleMask(canvas, size, paint);
-    }
-    {
-      final paint = Paint();
-      paint.blendMode = BlendMode.srcIn;
-      paint.style = PaintingStyle.fill;
-      paintWaves(canvas, size, paint);
-    }
-    {
-      final paint = Paint();
-      paint.blendMode = BlendMode.srcATop;
-      paint.style = PaintingStyle.fill;
-      paintBubbles(canvas, size, paint);
-    }
-    {
-      final paint = Paint();
-      paint.blendMode = BlendMode.srcATop;
-      paint.style = PaintingStyle.fill;
-      paintGlossyOverlay(canvas, size, paint);
-    }
+    lastPaintTimestamp = DateTime.now();
+    // repaintCount++;
+    // print("repaint count "+repaintCount.toString());
+    paintEmptyBottle(canvas, size);
+    final rect = Rect.fromLTRB(0, 0, size.width, size.height);
+    canvas.saveLayer(rect, brushBottleMask);
+    paintBottleMask(canvas, size);
+    paintWaves(canvas, size);
+    paintBubbles(canvas, size);
+    brushGlossy.style = PaintingStyle.fill;
+    paintGlossyOverlay(canvas, size);
     canvas.restore();
-    {
-      final paint = Paint();
-      paint.blendMode = BlendMode.srcATop;
-      paint.style = PaintingStyle.fill;
-      paint.color = capColor;
-      paintCap(canvas, size, paint);
-    }
+    paintCap(canvas, size);
   }
 
-  void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
+  void paintEmptyBottle(Canvas canvas, Size size) {
     final neckTop = size.width * 0.1;
     final neckBottom = size.height;
     final neckRingOuter = 0.0;
@@ -150,21 +145,21 @@ class WaterBottlePainter extends CustomPainter {
     path.lineTo(neckRingInnerR, neckBottom);
     path.lineTo(neckRingInnerR, neckTop);
     path.lineTo(neckRingOuterR, neckTop);
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushBottle);
   }
 
-  void paintBottleMask(Canvas canvas, Size size, Paint paint) {
+  void paintBottleMask(Canvas canvas, Size size) {
     final neckRingInner = size.width * 0.1;
     final neckRingInnerR = size.width - neckRingInner;
     canvas.drawRect(
         Rect.fromLTRB(
             neckRingInner + 5, 0, neckRingInnerR - 5, size.height - 5),
-        paint);
+        brushBottleMask);
   }
 
-  void paintWaves(Canvas canvas, Size size, Paint paint) {
+  void paintWaves(Canvas canvas, Size size) {
     for (var wave in waves) {
-      paint.color = wave.color;
+      brushWave.color = wave.color;
       final transform = Matrix4.identity();
       final desiredW = 15 * size.width;
       final desiredH = 0.1 * size.height;
@@ -177,7 +172,7 @@ class WaterBottlePainter extends CustomPainter {
       final translateY = (1.0 - waterLevel) * waterRange - desiredH;
       transform.translate(translateX, translateY);
       transform.scale(scaleX, scaleY);
-      canvas.drawPath(wave.svgData.transform(transform.storage), paint);
+      canvas.drawPath(wave.svgData.transform(transform.storage), brushWave);
       if (waves.indexOf(wave) != waves.length - 1) {
         continue;
       }
@@ -185,28 +180,29 @@ class WaterBottlePainter extends CustomPainter {
       if (gap > 0) {
         canvas.drawRect(
             Rect.fromLTRB(0, desiredH + translateY, size.width, size.height),
-            paint);
+            brushWave);
       }
     }
   }
 
-  void paintBubbles(Canvas canvas, Size size, Paint paint) {
+  void paintBubbles(Canvas canvas, Size size) {
     for (var bubble in bubbles) {
-      paint.color = bubble.color;
+      brushBubble.color = bubble.color;
       final offset = Offset(
           bubble.x * size.width, (bubble.y + 1.0 - waterLevel) * size.height);
       final radius = bubble.size * math.min(size.width, size.height);
-      canvas.drawCircle(offset, radius, paint);
+      canvas.drawCircle(offset, radius, brushBubble);
     }
   }
 
-  void paintGlossyOverlay(Canvas canvas, Size size, Paint paint) {
-    paint.color = Colors.white.withAlpha(20);
-    canvas.drawRect(Rect.fromLTRB(0, 0, size.width * 0.5, size.height), paint);
-    paint.color = Colors.white.withAlpha(80);
+  void paintGlossyOverlay(Canvas canvas, Size size) {
+    brushGlossy.color = Colors.white.withAlpha(40);
+    canvas.drawRect(
+        Rect.fromLTRB(0, 0, size.width * 0.5, size.height), brushGlossy);
+    brushGlossy.color = Colors.white.withAlpha(80);
     canvas.drawRect(
         Rect.fromLTRB(size.width * 0.9, 0, size.width * 0.95, size.height),
-        paint);
+        brushGlossy);
     final rect = Offset.zero & size;
     final gradient = LinearGradient(
       begin: Alignment.topLeft,
@@ -216,12 +212,12 @@ class WaterBottlePainter extends CustomPainter {
         Colors.white.withAlpha(0),
       ],
     ).createShader(rect);
-    paint.color = Colors.white;
-    paint.shader = gradient;
-    canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), paint);
+    brushGlossy.color = Colors.white;
+    brushGlossy.shader = gradient;
+    canvas.drawRect(Rect.fromLTRB(0, 0, size.width, size.height), brushGlossy);
   }
 
-  void paintCap(Canvas canvas, Size size, Paint paint) {
+  void paintCap(Canvas canvas, Size size) {
     final capTop = 0.0;
     final capBottom = size.width * 0.2;
     final capMid = (capBottom - capTop) / 2;
@@ -237,9 +233,9 @@ class WaterBottlePainter extends CustomPainter {
     path.lineTo(neckRingInnerR, capMid);
     path.lineTo(capR, capTop);
     path.close();
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushCap);
   }
 
   @override
-  bool shouldRepaint(WaterBottlePainter oldDelegate) => true;
+  bool shouldRepaint(WaterBottlePainter oldDelegate) => false;
 }

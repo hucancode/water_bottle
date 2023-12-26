@@ -30,9 +30,6 @@ class TriangularBottleState extends State<TriangularBottle>
   void initState() {
     super.initState();
     initWater(widget.waterColor, this);
-    waves.first.animation.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
@@ -43,6 +40,14 @@ class TriangularBottleState extends State<TriangularBottle>
 
   @override
   Widget build(BuildContext context) {
+    final painter = TriangularBottleStatePainter(
+      repaint: waves.first.animation,
+      waves: waves,
+      bubbles: bubbles,
+      waterLevel: waterLevel,
+      bottleColor: widget.bottleColor,
+      capColor: widget.capColor,
+    );
     return Stack(
       fit: StackFit.expand,
       clipBehavior: Clip.hardEdge,
@@ -50,13 +55,7 @@ class TriangularBottleState extends State<TriangularBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: TriangularBottleStatePainter(
-              waves: waves,
-              bubbles: bubbles,
-              waterLevel: waterLevel,
-              bottleColor: widget.bottleColor,
-              capColor: widget.capColor,
-            ),
+            painter: painter,
           ),
         ),
       ],
@@ -83,7 +82,7 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
         );
 
   @override
-  void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
+  void paintEmptyBottle(Canvas canvas, Size size) {
     const SMOOTH_CORNER = true;
     final r = math.min(size.width, size.height);
     final neckTop = size.width * 0.1;
@@ -119,11 +118,11 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
     path.lineTo(neckRingInnerR, neckBottom);
     path.lineTo(neckRingInnerR, neckTop);
     path.lineTo(neckRingOuterR, neckTop);
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushBottle);
   }
 
   @override
-  void paintBottleMask(Canvas canvas, Size size, Paint paint) {
+  void paintBottleMask(Canvas canvas, Size size) {
     const SMOOTH_CORNER = true;
     final r = math.min(size.width, size.height);
     final neckTop = size.width * 0.1;
@@ -156,11 +155,11 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
     path.lineTo(neckRingInnerR, neckBottom);
     path.lineTo(neckRingInnerR, neckTop);
     path.close();
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushBottleMask);
   }
 
   @override
-  void paintGlossyOverlay(Canvas canvas, Size size, Paint paint) {
+  void paintGlossyOverlay(Canvas canvas, Size size) {
     final r = math.min(size.width, size.height);
     final rect = Offset(0, size.height - r) & size;
     final gradient = RadialGradient(
@@ -170,16 +169,16 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
         Colors.white.withAlpha(0),
       ],
     ).createShader(rect);
-    paint.color = Colors.white;
-    paint.shader = gradient;
+    brushGlossy.color = Colors.white;
+    brushGlossy.shader = gradient;
     // gradient
     canvas.drawRect(
         Rect.fromLTRB(5, size.height - r + 3, size.width - 5, size.height - 5),
-        paint);
+        brushGlossy);
   }
 
   @override
-  void paintCap(Canvas canvas, Size size, Paint paint) {
+  void paintCap(Canvas canvas, Size size) {
     if (size.height / size.width < BREAK_POINT) {
       return;
     }
@@ -198,6 +197,6 @@ class TriangularBottleStatePainter extends WaterBottlePainter {
     path.lineTo(neckRingInnerR, capMid);
     path.lineTo(capR, capTop);
     path.close();
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushCap);
   }
 }

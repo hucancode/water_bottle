@@ -35,9 +35,6 @@ class SphericalBottleState extends State<SphericalBottle>
   void initState() {
     super.initState();
     initWater(widget.waterColor, this);
-    waves.first.animation.addListener(() {
-      setState(() {});
-    });
   }
 
   @override
@@ -48,6 +45,14 @@ class SphericalBottleState extends State<SphericalBottle>
 
   @override
   Widget build(BuildContext context) {
+    final painter = SphericalBottlePainter(
+      repaint: waves.first.animation,
+      waves: waves,
+      bubbles: bubbles,
+      waterLevel: waterLevel,
+      bottleColor: widget.bottleColor,
+      capColor: widget.capColor,
+    );
     return Stack(
       fit: StackFit.expand,
       clipBehavior: Clip.hardEdge,
@@ -55,13 +60,7 @@ class SphericalBottleState extends State<SphericalBottle>
         AspectRatio(
           aspectRatio: 1 / 1,
           child: CustomPaint(
-            painter: SphericalBottlePainter(
-              waves: waves,
-              bubbles: bubbles,
-              waterLevel: waterLevel,
-              bottleColor: widget.bottleColor,
-              capColor: widget.capColor,
-            ),
+            painter: painter,
           ),
         ),
       ],
@@ -89,11 +88,11 @@ class SphericalBottlePainter extends WaterBottlePainter {
         );
 
   @override
-  void paintEmptyBottle(Canvas canvas, Size size, Paint paint) {
+  void paintEmptyBottle(Canvas canvas, Size size) {
     final r = math.min(size.width, size.height);
     if (size.height / size.width < BREAK_POINT) {
       canvas.drawCircle(
-          Offset(size.width / 2, size.height - r / 2), r / 2, paint);
+          Offset(size.width / 2, size.height - r / 2), r / 2, brushBottle);
       return;
     }
     final neckTop = size.width * 0.1;
@@ -109,16 +108,16 @@ class SphericalBottlePainter extends WaterBottlePainter {
     path.moveTo(neckRingInnerR, neckBottom);
     path.lineTo(neckRingInnerR, neckTop);
     path.lineTo(neckRingOuterR, neckTop);
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushBottle);
     canvas.drawArc(Rect.fromLTRB(0, size.height - r, size.width, size.height),
-        math.pi * 1.59, math.pi * 1.82, false, paint);
+        math.pi * 1.59, math.pi * 1.82, false, brushBottle);
   }
 
   @override
-  void paintBottleMask(Canvas canvas, Size size, Paint paint) {
+  void paintBottleMask(Canvas canvas, Size size) {
     final r = math.min(size.width, size.height);
-    canvas.drawCircle(
-        Offset(size.width / 2, size.height - r / 2), r / 2 - 5, paint);
+    canvas.drawCircle(Offset(size.width / 2, size.height - r / 2), r / 2 - 5,
+        brushBottleMask);
     if (size.height / size.width < BREAK_POINT) {
       return;
     }
@@ -128,11 +127,11 @@ class SphericalBottlePainter extends WaterBottlePainter {
     canvas.drawRect(
         Rect.fromLTRB(neckRingInner + 5, neckTop, neckRingInnerR - 5,
             size.height - r / 2),
-        paint);
+        brushBottleMask);
   }
 
   @override
-  void paintGlossyOverlay(Canvas canvas, Size size, Paint paint) {
+  void paintGlossyOverlay(Canvas canvas, Size size) {
     final r = math.min(size.width, size.height);
     final rect = Offset(0, size.height - r) & size;
     final gradient = RadialGradient(
@@ -142,18 +141,18 @@ class SphericalBottlePainter extends WaterBottlePainter {
         Colors.white.withAlpha(0),
       ],
     ).createShader(rect);
-    paint.color = Colors.white;
-    paint.shader = gradient;
+    brushGlossy.color = Colors.white;
+    brushGlossy.shader = gradient;
     // gradient
     canvas.drawRect(
         Rect.fromLTRB(5, size.height - r + 3, size.width - 5, size.height - 5),
-        paint);
+        brushGlossy);
     // highlight
-    paint.shader = null;
-    paint.color = Colors.white.withAlpha(30);
-    paint.style = PaintingStyle.stroke;
+    brushGlossy.shader = null;
+    brushGlossy.color = Colors.white.withAlpha(30);
+    brushGlossy.style = PaintingStyle.stroke;
     const HIGHLIGHT_WIDTH = 0.1;
-    paint.strokeWidth = r * HIGHLIGHT_WIDTH;
+    brushGlossy.strokeWidth = r * HIGHLIGHT_WIDTH;
     const HIGHLIGHT_OFFSET = 0.1;
     final delta = r * HIGHLIGHT_OFFSET;
     canvas.drawArc(
@@ -162,18 +161,18 @@ class SphericalBottlePainter extends WaterBottlePainter {
         math.pi * 0.8,
         math.pi * 0.4,
         false,
-        paint);
+        brushGlossy);
     canvas.drawArc(
         Rect.fromLTRB(delta, size.height - r + delta, size.width - delta,
             size.height - delta),
         math.pi * 1.25,
         math.pi * 0.1,
         false,
-        paint);
+        brushGlossy);
   }
 
   @override
-  void paintCap(Canvas canvas, Size size, Paint paint) {
+  void paintCap(Canvas canvas, Size size) {
     if (size.height / size.width < BREAK_POINT) {
       return;
     }
@@ -192,6 +191,6 @@ class SphericalBottlePainter extends WaterBottlePainter {
     path.lineTo(neckRingInnerR, capMid);
     path.lineTo(capR, capTop);
     path.close();
-    canvas.drawPath(path, paint);
+    canvas.drawPath(path, brushCap);
   }
 }

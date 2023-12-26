@@ -46,7 +46,7 @@ class WaveLayer {
   double get offset => animation.value;
 
   /// Setup animations
-  void init(TickerProvider provider, {int frequency = 10}) {
+  void init(TickerProvider provider, {int frequency = 5000}) {
     controller = AnimationController(
       vsync: provider,
       duration: Duration(milliseconds: frequency),
