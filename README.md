@@ -4,13 +4,13 @@
 
 This library add a bottle widget to your screen. You can use it as a loading indicator, a progress tracker, or any kind of measurement suits your needs.
 
-![Plain](https://github.com/hucancode/water_bottle/blob/main/readme/cup.gif?raw=true)
-![Sphere](https://github.com/hucancode/water_bottle/blob/main/readme/sphere.gif?raw=true)
-![Triangle](https://github.com/hucancode/water_bottle/blob/main/readme/triangle.gif?raw=true)
+![Plain](readme/cup.gif?raw=true)
+![Sphere](readme/sphere.gif?raw=true)
+![Triangle](readme/triangle.gif?raw=true)
 
 Sphere bottle get reduced to a ball when aspect ratio smaller than 1
 
-![Responsive Sphere](https://github.com/hucancode/water_bottle/blob/main/readme/sphere_responsive.gif?raw=true)
+![Responsive Sphere](readme/sphere_responsive.gif?raw=true)
 
 ## Usage
 
