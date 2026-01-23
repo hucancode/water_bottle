@@ -30,8 +30,14 @@ class PathWriter extends PathProxy {
 }
 
 class WaveLayer {
+  /// Shared random instance for better performance
+  static final _random = math.Random();
+
   /// Animations
   late final Animation<double> animation;
+
+  /// CurvedAnimation that needs disposal
+  CurvedAnimation? _curvedAnimation;
 
   /// Animation controller
   late final AnimationController controller;
@@ -39,11 +45,22 @@ class WaveLayer {
   /// SVG data
   final svgData = Path();
 
+  late final Rect bounds;
+
   /// Wave color
   Color color = Colors.blueGrey;
 
   /// Current offset
   double get offset => animation.value;
+
+  /// Status listener to avoid accumulation
+  void _onStatusChange(AnimationStatus status) {
+    if (status == AnimationStatus.completed) {
+      controller.repeat(reverse: true);
+    } else if (status == AnimationStatus.dismissed) {
+      controller.forward();
+    }
+  }
 
   /// Setup animations
   void init(TickerProvider provider, {int frequency = 10}) {
@@ -51,22 +68,18 @@ class WaveLayer {
       vsync: provider,
       duration: Duration(milliseconds: frequency),
     );
-    animation = Tween<double>(begin: 0.0, end: 1.0).animate(
-        CurvedAnimation(parent: controller, curve: Curves.easeInOutSine));
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        controller.repeat(reverse: true);
-      } else if (status == AnimationStatus.dismissed) {
-        controller.forward();
-      }
-    });
-    controller.value = math.Random().nextDouble();
+    _curvedAnimation = CurvedAnimation(parent: controller, curve: Curves.easeInOutSine);
+    animation = Tween<double>(begin: 0.0, end: 1.0).animate(_curvedAnimation!);
+    animation.removeStatusListener(_onStatusChange);
+    animation.addStatusListener(_onStatusChange);
+    controller.value = _random.nextDouble();
     controller.forward();
     buildPath();
   }
 
   /// Clean up
   void dispose() {
+    _curvedAnimation?.dispose();
     controller.dispose();
   }
 
@@ -86,7 +99,8 @@ class WaveLayer {
     //   "M0,128L9.6,122.7C19.2,117,38,107,58,122.7C76.8,139,96,181,115,213.3C134.4,245,154,267,173,277.3C192,288,211,288,230,256C249.6,224,269,160,288,149.3C307.2,139,326,181,346,202.7C364.8,224,384,224,403,202.7C422.4,181,442,139,461,144C480,149,499,203,518,218.7C537.6,235,557,213,576,176C595.2,139,614,85,634,69.3C652.8,53,672,75,691,101.3C710.4,128,730,160,749,192C768,224,787,256,806,229.3C825.6,203,845,117,864,106.7C883.2,96,902,160,922,181.3C940.8,203,960,181,979,160C998.4,139,1018,117,1037,144C1056,171,1075,245,1094,272C1113.6,299,1133,277,1152,229.3C1171.2,181,1190,107,1210,64C1228.8,21,1248,11,1267,58.7C1286.4,107,1306,213,1325,256C1344,299,1363,277,1382,272C1401.6,267,1421,277,1430,282.7L1440,288L1440,320L1430.4,320C1420.8,320,1402,320,1382,320C1363.2,320,1344,320,1325,320C1305.6,320,1286,320,1267,320C1248,320,1229,320,1210,320C1190.4,320,1171,320,1152,320C1132.8,320,1114,320,1094,320C1075.2,320,1056,320,1037,320C1017.6,320,998,320,979,320C960,320,941,320,922,320C902.4,320,883,320,864,320C844.8,320,826,320,806,320C787.2,320,768,320,749,320C729.6,320,710,320,691,320C672,320,653,320,634,320C614.4,320,595,320,576,320C556.8,320,538,320,518,320C499.2,320,480,320,461,320C441.6,320,422,320,403,320C384,320,365,320,346,320C326.4,320,307,320,288,320C268.8,320,250,320,230,320C211.2,320,192,320,173,320C153.6,320,134,320,115,320C96,320,77,320,58,320C38.4,320,19,320,10,320L0,320Z",
     //   "M0,224L9.6,202.7C19.2,181,38,139,58,101.3C76.8,64,96,32,115,32C134.4,32,154,64,173,69.3C192,75,211,53,230,64C249.6,75,269,117,288,160C307.2,203,326,245,346,261.3C364.8,277,384,267,403,240C422.4,213,442,171,461,165.3C480,160,499,192,518,181.3C537.6,171,557,117,576,90.7C595.2,64,614,64,634,96C652.8,128,672,192,691,192C710.4,192,730,128,749,106.7C768,85,787,107,806,138.7C825.6,171,845,213,864,213.3C883.2,213,902,171,922,133.3C940.8,96,960,64,979,90.7C998.4,117,1018,203,1037,245.3C1056,288,1075,288,1094,261.3C1113.6,235,1133,181,1152,138.7C1171.2,96,1190,64,1210,96C1228.8,128,1248,224,1267,224C1286.4,224,1306,128,1325,96C1344,64,1363,96,1382,133.3C1401.6,171,1421,213,1430,234.7L1440,256L1440,320L1430.4,320C1420.8,320,1402,320,1382,320C1363.2,320,1344,320,1325,320C1305.6,320,1286,320,1267,320C1248,320,1229,320,1210,320C1190.4,320,1171,320,1152,320C1132.8,320,1114,320,1094,320C1075.2,320,1056,320,1037,320C1017.6,320,998,320,979,320C960,320,941,320,922,320C902.4,320,883,320,864,320C844.8,320,826,320,806,320C787.2,320,768,320,749,320C729.6,320,710,320,691,320C672,320,653,320,634,320C614.4,320,595,320,576,320C556.8,320,538,320,518,320C499.2,320,480,320,461,320C441.6,320,422,320,403,320C384,320,365,320,346,320C326.4,320,307,320,288,320C268.8,320,250,320,230,320C211.2,320,192,320,173,320C153.6,320,134,320,115,320C96,320,77,320,58,320C38.4,320,19,320,10,320L0,320Z"
     // ];
-    final i = math.Random().nextInt(PATHS.length);
+    final i = _random.nextInt(PATHS.length);
     writeSvgPathDataToPath(PATHS[i], PathWriter(path: svgData));
+    bounds = svgData.getBounds();
   }
 }
