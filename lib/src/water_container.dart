@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'bubble.dart';
 import 'wave.dart';
 
-class WaterContainer {
+mixin class WaterContainer {
   /// Holds all wave object instances
   List<WaveLayer> waves = List<WaveLayer>.empty(growable: true);
 
