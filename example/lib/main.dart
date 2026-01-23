@@ -69,15 +69,15 @@ class _MyHomePageState extends State<MyHomePage> {
         child: ToggleButtons(
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               child: Icon(Icons.crop_portrait),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               child: Icon(Icons.circle_outlined),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 30),
+              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
               child: Icon(Icons.change_history),
             ),
           ],
