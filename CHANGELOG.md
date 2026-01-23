@@ -1,5 +1,11 @@
 ## 0.0.7
 
+* Fix memory leaks
+* Upgrade to `path_parsing` version `1.1.0`
+* Upgrade example code to flutter `3.38`
+
+## 0.0.7
+
 * Add documentation
 
 ## 0.0.6
